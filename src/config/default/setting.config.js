@@ -17,9 +17,9 @@ const setting = {
   // 默认的接口地址
   baseURL: getBaseUrL(),
   // API版本
-  apiVersion: process.env.VUE_APP_API_VERSION,
+  apiVersion: '/api',
   // 代理地址
-  proxyURL: process.env.VUE_APP_API_ROOT,
+  proxyURL: 'http://localhost:5000/',
   // 图片上传地址
   uploadUrl: getBaseUrL() + 'common/upload',
   // 开发环境端口号
@@ -43,20 +43,23 @@ const setting = {
   // 上传视频限制大小(MB)
   videoSize: 100,
   // 表格显示条数
-  pageSize: 20,
-};
+  pageSize: 20
+}
 
 // 获取baseurl
 function getBaseUrL() {
-  let api;
+  let api
   // typeof可以用来检查一个没有声明的变量，而不报错。
   // http://javascript.ruanyifeng.com/grammar/types.html#toc1
-  if (typeof window != 'undefined' && window.location.hostname === 'localhost') {
-    api = `/${process.env.VUE_APP_API_VERSION}`;
+  if (
+    typeof window != 'undefined' &&
+    window.location.hostname === 'localhost'
+  ) {
+    api = `/${process.env.VUE_APP_API_VERSION}`
   } else {
-    api = `${process.env.VUE_APP_API_ROOT}${process.env.VUE_APP_API_VERSION}`;
+    api = `${process.env.VUE_APP_API_ROOT}${process.env.VUE_APP_API_VERSION}`
   }
-  return api;
-};
+  return api
+}
 
-module.exports = setting;
+module.exports = setting

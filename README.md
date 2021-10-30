@@ -7,3 +7,5 @@
 - less 模块化, 解决类名全局污染问题 https://blog.csdn.net/mpr0xy/article/details/103512652
 
 - less 全局变量
+
+- craco.config.js 获取不到环境变量???

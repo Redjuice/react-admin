@@ -1,7 +1,6 @@
 const CracoLessPlugin = require('craco-less')
 const path = require('path')
 const { proxyURL, devPort } = require('./src/config')
-
 module.exports = {
   babel: {
     plugins: [
