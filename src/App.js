@@ -1,13 +1,10 @@
-import { Button } from 'antd'
+import React, { Component } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <Button type="primary">Hello Antd</Button>
-      </header>
-    </div>
-  )
+export default class App extends Component {
+  componentDidMount() {
+    console.log(process.env.REACT_APP_API_ROOT)
+  }
+  render() {
+    return <div>App..</div>
+  }
 }
-
-export default App
