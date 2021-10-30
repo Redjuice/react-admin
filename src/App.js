@@ -1,6 +1,6 @@
-import logo from '@/logo.svg';
-import { Button } from 'antd';
-import './App.css';
+import logo from '@/logo.svg'
+import { Button } from 'antd'
+import './App.less'
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
         <Button type="primary">Hello Antd</Button>
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
