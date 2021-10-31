@@ -7,10 +7,13 @@ import { connect } from 'react-redux'
 class PrivateRouter extends Component {
   render() {
     const { isLogin, component: Component, ...rest } = this.props
-    return isLogin ? (
-      <Route {...rest} render={(props) => <Component {...props} />} />
-    ) : (
-      <Redirect to="/login" />
+    return (
+      <Route
+        {...rest}
+        render={(props) =>
+          isLogin ? <Component {...props} /> : <Redirect to="/login" />
+        }
+      />
     )
   }
 }

@@ -13,7 +13,7 @@ export default class App extends Component {
         <Router>
           <Switch>
             <Route path="/login" component={Login}></Route>
-            <PrivateRouter exact path="/" component={Index} />
+            <PrivateRouter path="/" component={Index}></PrivateRouter>
           </Switch>
         </Router>
       </Provider>

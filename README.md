@@ -18,6 +18,8 @@
 
 - 优化所有页面
 
+- 使用require.context实现前端工程自动化
+
 - 封装 axios(90%)
 
 - 优化 proxy, 在 craco.config.js(90%)

@@ -42,7 +42,7 @@ class Login extends Component {
 
   render() {
     const { isLogin } = this.props
-    if (isLogin) return <Redirect to="/" />
+    if (isLogin) return <Redirect to="/home" />
     return (
       <div className="login" data-component="login">
         <section className="login-content">

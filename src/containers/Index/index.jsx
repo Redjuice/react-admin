@@ -1,13 +1,26 @@
 import React, { Component } from 'react'
-// import axios from 'axios'
-import { loginApi } from '@/apis'
-
+import { Layout } from 'antd'
+import MyHeader from './MyHeader'
+import MySider from './MySider'
+import MyContent from './MyContent'
+import './index.less'
+const { Header, Sider, Content } = Layout
 export default class Index extends Component {
-  async componentDidMount() {
-    const { data } = await loginApi({ username: 'admin', password: 'admin' })
-    console.log(data)
-  }
   render() {
-    return <div>Index</div>
+    return (
+      <Layout>
+        <Sider>
+          <MySider />
+        </Sider>
+        <Layout>
+          <Header>
+            <MyHeader />
+          </Header>
+          <Content>
+            <MyContent />
+          </Content>
+        </Layout>
+      </Layout>
+    )
   }
 }
