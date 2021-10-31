@@ -1,6 +1,5 @@
 const CracoLessPlugin = require('craco-less')
 const path = require('path')
-const { proxyURL, devPort } = require('./src/config')
 module.exports = {
   babel: {
     plugins: [
@@ -35,22 +34,5 @@ module.exports = {
         }
       }
     }
-  ],
-  devServer: {
-    host: 'localhost',
-    port: devPort,
-    open: true,
-    // 前端配置代理访问后端(解决谷歌浏览器开发环境不携带cookie以及跨域问题)
-    proxy: {
-      '/api': {
-        target: proxyURL,
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        },
-        cookieDomainRewrite: 'localhost'
-      }
-    }
-  }
+  ]
 }

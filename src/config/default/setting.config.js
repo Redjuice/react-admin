@@ -55,9 +55,9 @@ function getBaseUrL() {
     typeof window != 'undefined' &&
     window.location.hostname === 'localhost'
   ) {
-    api = `/${process.env.VUE_APP_API_VERSION}`
+    api = `/${process.env.REACT_APP_API_VERSION}`
   } else {
-    api = `${process.env.VUE_APP_API_ROOT}${process.env.VUE_APP_API_VERSION}`
+    api = `${process.env.REACT_APP_API_ROOT}${process.env.REACT_APP_API_VERSION}`
   }
   return api
 }
