@@ -12,7 +12,9 @@ module.exports = {
           style: 'css'
         },
         'antd'
-      ]
+      ],
+      // 配置 @babel/plugin-proposal-decorators, 提供装饰器语法
+      ['@babel/plugin-proposal-decorators', { legacy: true }]
     ]
   },
   webpack: {

@@ -5,7 +5,6 @@ import NProgress from 'nprogress'
 // import store from '@/redux/store';
 // import { deleteUserAndToken } from '@/redux/actions/login'
 import 'nprogress/nprogress.css'
-console.log(baseURL)
 // axios配置
 let config = {
   baseURL,
