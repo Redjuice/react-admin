@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from '@/redux/store'
-import Index from '@/containers/Index'
 import Login from '@/containers/Login'
+import Index from '@/containers/Index'
+import PrivateRouter from '@/components/PrivateRouter'
 
 export default class App extends Component {
   render() {
@@ -16,9 +12,8 @@ export default class App extends Component {
       <Provider store={store}>
         <Router>
           <Switch>
-            <Route exact path="/" component={Index}></Route>
             <Route path="/login" component={Login}></Route>
-            <Redirect to="/" />
+            <PrivateRouter exact path="/" component={Index} />
           </Switch>
         </Router>
       </Provider>
