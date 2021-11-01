@@ -10,15 +10,28 @@ import './index.less'
 
 const { SubMenu } = Menu
 
-@connect((state) => ({ userInfo: state.login }))
+@connect((state) => ({ userInfo: state.login.user }))
 @withRouter
 class MySider extends Component {
   state = {
+    menu: [],
     selectedKeys: [],
     openKeys: []
   }
 
   componentDidMount() {
+    let menu
+    const { menus } = this.props.userInfo.role
+    if (menus && Array.isArray(menus) && menus.length) {
+      menu = menuList.filter((menu) => {
+        return menus.some((item) => {
+          return item === menu.path
+        })
+      })
+    } else {
+      menu = menuList
+    }
+    this.setState({ menu })
     let pathname = this.props.location.pathname
     if (pathname === '/') pathname = '/home'
     const menuKey = pathname.split('/')
@@ -90,7 +103,7 @@ class MySider extends Component {
   }
 
   render() {
-    const { selectedKeys, openKeys } = this.state
+    const { menu, selectedKeys, openKeys } = this.state
     return (
       <div className="sider" data-component="sider">
         <NavLink to="/home" className="sider-header">
@@ -105,12 +118,11 @@ class MySider extends Component {
           theme="dark"
           mode="inline"
         >
-          {menuList &&
-            menuList.map((item) => {
-              return item.children && item.children.length
-                ? this.renderSubMenu(item)
-                : this.renderMenu(item)
-            })}
+          {menu.map((item) => {
+            return item.children && item.children.length
+              ? this.renderSubMenu(item)
+              : this.renderMenu(item)
+          })}
         </Menu>
       </div>
     )

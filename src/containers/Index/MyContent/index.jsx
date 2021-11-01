@@ -3,7 +3,6 @@ import { Switch, Redirect } from 'react-router-dom'
 import PrivateRouter from '@/components/PrivateRouter'
 import Components from './utils' // 实现前端工程自动化
 export default class MyContent extends Component {
-  componentDidMount() {}
   render() {
     return (
       <Switch>
@@ -17,6 +16,7 @@ export default class MyContent extends Component {
             />
           )
         })}
+        {/* TODO: 待处理 */}
         <Redirect to="/home" />
       </Switch>
     )

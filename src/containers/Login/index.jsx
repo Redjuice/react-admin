@@ -42,6 +42,7 @@ class Login extends Component {
 
   render() {
     const { isLogin } = this.props
+    // TODO: 待处理
     if (isLogin) return <Redirect to="/home" />
     return (
       <div className="login" data-component="login">
