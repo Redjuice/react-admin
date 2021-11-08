@@ -1,4 +1,4 @@
-const files = require.context('@/containers', true, /\.jsx$/)
+const files = require.context('@/pages', true, /\.jsx$/)
 const components = []
 // eslint-disable-next-line array-callback-return
 files.keys().map((key) => {
