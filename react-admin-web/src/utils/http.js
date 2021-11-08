@@ -52,7 +52,7 @@ _axios.interceptors.response.use(
     // token有问题
     if (error.response.status === 401) {
       const { status, msg } = error.response.data
-      if (status === 2) {
+      if (status === 1) {
         // 提示消息
         message.error(`${msg}，请重新登录`)
         // 分发删除用户信息的action

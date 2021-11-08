@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Form, Input, Button, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { title } from '@/config'
-import { loginApi } from '@/apis'
+// import { loginApi } from '@/apis'
 import { saveUserAndToken } from '@/redux/actions/login'
 import './index.less'
 
@@ -13,15 +13,32 @@ import './index.less'
 })
 class Login extends Component {
   login = async (values) => {
-    const { status, msg, data } = await loginApi(values)
-    if (status === 0) {
-      const { user, token } = data
-      this.props.saveUserAndToken({ user, token }) // 保存数据到redux
-      message.info('登录成功')
-      this.props.history.replace('/')
-    } else {
-      message.warn(msg)
+    console.log(values);
+    // TODO: 因为需要服务器, 这边先使用mock数据
+    const data = {
+      user: {
+        _id: '60d1342029ac623e1cbba92a',
+        username: 'admin',
+        create_time: 1624323104488,
+        role: { menus: [] }
+      },
+      token:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZDEzNDIwMjlhYzYyM2UxY2JiYTkyYSIsImlhdCI6MTYzNTk5MjgxNSwiZXhwIjoxNjM2NTk3NjE1fQ.hi6jSeJ3zl1swNYzS4RI7GDTCY4Z67cVcEYOYRzAaIY'
     }
+    const { user, token } = data
+    this.props.saveUserAndToken({ user, token }) // 保存数据到redux
+    message.info('登录成功')
+    this.props.history.replace('/')
+
+    // const { status, msg, data } = await loginApi(values)
+    // if (status === 0) {
+    //   const { user, token } = data
+    //   this.props.saveUserAndToken({ user, token }) // 保存数据到redux
+    //   message.info('登录成功')
+    //   this.props.history.replace('/')
+    // } else {
+    //   message.warn(msg)
+    // }
   }
 
   validator = (_, value) => {

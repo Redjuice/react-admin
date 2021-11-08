@@ -1,6 +1,6 @@
 const { createProxyMiddleware } = require('http-proxy-middleware')
 const { proxyURL, apiVersion } = require('./config')
-console.log(proxyURL, apiVersion, process.env.REACT_APP_API_ROOT)
+
 module.exports = function (app) {
   app.use(
     createProxyMiddleware([apiVersion], {
