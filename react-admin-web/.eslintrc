@@ -1,10 +1,35 @@
 {
+  "root": true,
+  "env": {
+    "node": true,
+    "browser": true,
+    "amd": true
+  },
+  "parser": "@babel/eslint-parser",
   "extends": [
-    "react-app"
-    // "plugin:prettier/recommended"
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
   ],
-  "plugins": ["prettier"],
   "rules": {
-    "no-unused-vars": 2
+    // 在这里添加需要覆盖的规则
+  },
+  "parserOptions": {
+    //指定ESLint可以解析JSX语法
+    "ecmaVersion": 2019,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
+  },
+  "settings": {
+    //自动发现React的版本，从而进行规范react代码
+    "react": {
+      "pragma": "React",
+      "version": "detect"
+    }
   }
 }

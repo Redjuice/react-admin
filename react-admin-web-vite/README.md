@@ -4,9 +4,6 @@
 ### 1. 目录
 ```
 ├─ .vscode                   // 工作区的配置文件
-├─ public                    // 模板存放目录
-│  ├─ favicon.ico            // 网站图标
-│  └─ index.html             // 模板html文件
 ├─ src                       // 项目
 │  ├─ apis                   // api文件
 │  ├─ assets                 // 静态资源
@@ -18,9 +15,9 @@
 │  ├─ routers                // 路由
 │  ├─ styles                 // 样式
 │  ├─ utils                  // 工具函数
-│  ├─ App.js                 // APP组件
-│  ├─ index.js               // 项目入口
-│  └─ setupProxy.js          // Proxy配置
+│  ├─ App.jsx                // APP组件
+│  ├─ main.jsx               // 项目入口
+├─ index.html                // 模板html文件
 ├─ .env                      // 全局默认环境变量
 ├─ .env.development          // dev环境变量
 ├─ .env.test                 // test环境变量
@@ -28,25 +25,24 @@
 ├─ .eslintrc                 // eslint配置文件
 ├─ .gitignore                // git忽略上传文件
 ├─ .prettierrc               // prettier配置文件
-├─ craco.config.js           // craco配置文件
+├─ vite.config               // vite配置文件
 ├─ jsconfig.json             // js项目配置
-├─ package-lock.json         // package版本依赖
 ├─ package.json              // 项目描述
-├─ README.md                 // 工程文档说明
+├─ package-lock.json         // package版本依赖
 ├─ yarn.lock                 // yarn版本依赖
+├─ README.md                 // 工程文档说明
 ```
 
 ### 2. 搭建步骤
 
 #### 2.1 初始化项目
 ```
-# 全局安装
-npm install -g create-react-app
-# 构建一个my-app的项目
-npx create-react-app my-app
-cd my-app
+# 构建一个vite项目
+yarn create vite
+# 依赖安装
+yarn
 # 启动编译当前的React项目，并自动打开 http://localhost:3000/
-npm start
+npm dev
 ```
 
 #### 2.2 配置commitizen和antd组件库
@@ -55,54 +51,68 @@ npm start
 教程: https://www.jianshu.com/p/d264f88d13a4
 
 # Antd的安装和配置
-教程: https://ant.design/docs/react/use-with-create-react-app-cn
+教程: https://ant.design/docs/react/introduce-cn
 ```
 
-#### 2.3 配置craco
+#### 2.3 配置vite
 ```
-# 根目录新建craco.config.js
-文档: https://github.com/gsoft-inc/craco
+// vite.config.js
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import styleImport from "vite-plugin-style-import";
+import { resolve } from "path";
+import { readFileSync } from "fs";
+import lessToJS from "less-vars-to-js";
+import configs from "./src/config";
 
-const CracoLessPlugin = require('craco-less')
-const path = require('path')
-module.exports = {
-  babel: {
-    plugins: [
-      // 配置 babel-plugin-import, 解决 AntDesign 按需加载
-      [
-        'import',
-        {
-          libraryName: 'antd',
-          libraryDirectory: 'es',
-          style: 'css'
-        },
-        'antd'
-      ],
-      // 配置 @babel/plugin-proposal-decorators, 提供装饰器语法
-      ['@babel/plugin-proposal-decorators', { legacy: true }]
-    ]
-  },
-  webpack: {
-    // 配置别名
-    alias: {
-      '@': path.resolve(__dirname, 'src')
-    }
-  },
-  // craco 提供的插件
+// less-vars-to-js将less样式转化为json键值对的形式
+const themeVariables = lessToJS(
+  readFileSync(resolve(__dirname, "./src/styles/variables.less"), "utf8")
+);
+
+// https://vitejs.dev/config/
+export default defineConfig({
   plugins: [
-    // 配置 less
-    {
-      plugin: CracoLessPlugin,
-      options: {
-        lessLoaderOptions: {
-          lessOptions: {
-            javascriptEnabled: true
-          }
-        }
-      }
-    }
-  ]
-}
+    react(),
+    // 配置 vite-plugin-style-import, 解决 AntDesign 按需加载
+    styleImport({
+      libs: [
+        {
+          libraryName: "antd",
+          esModule: true,
+          resolveStyle: (name) => `antd/es/${name}/style`,
+        },
+      ],
+    }),
+  ],
+  css: {
+    // 指定传递给 CSS 预处理器的选项
+    preprocessorOptions: {
+      less: {
+        javascriptEnabled: true, // 支持内联JavaScript
+        modifyVars: themeVariables, // 重写less变量，定制Antd样式
+      },
+    },
+  },
+  resolve: {
+    // 别名
+    alias: {
+      "@": resolve(__dirname, "src"), // src路径
+    },
+  },
+  server: {
+    port: configs.devPort,
+    open: configs.devOpen,
+    proxy: {
+      "/api": {
+        target: configs.proxyURL, //配置你要请求的服务器地址
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
+});
+
 
 ```
 
@@ -130,12 +140,9 @@ yarn add  eslint-plugin-prettier
 {
   "extends": [
     "react-app"
-    // "plugin:prettier/recommended"
+    "plugin:prettier/recommended"
   ],
-  "plugins": ["prettier"],
-  "rules": {
-    "no-unused-vars": 2
-  }
+  "rules": {}
 }
 
 # 新建.prettierrc文件
@@ -188,22 +195,6 @@ function App() {
 #### 2.8 axios + proxy
 ```
 # axios(utils/http.js)
-
-# proxy(setupProxy.js)
-const { createProxyMiddleware } = require('http-proxy-middleware')
-const { proxyURL, apiVersion } = require('./config')
-
-module.exports = function (app) {
-  app.use(
-    createProxyMiddleware([apiVersion], {
-      target: proxyURL, //配置你要请求的服务器地址
-      changeOrigin: true,
-      pathRewrite: {
-        [`${apiVersion}`]: ''
-      }
-    })
-  )
-}
 ```
 
 #### 2.9 登录
@@ -222,6 +213,7 @@ module.exports = function (app) {
 - [ ] 面包屑
 - [ ] layoutList, layoutFrom, layoutDetail 组件
 - [ ] 添加PWA
-- [ ] 工具方法, hooks
+- [ ] 工具方法, 自定义公共hooks
 - [ ] 公共组件
 - [ ] 发布相关
+- [ ] 上传图片

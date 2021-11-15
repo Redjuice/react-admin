@@ -30,14 +30,24 @@
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.5.4",
     "@babel/plugin-proposal-decorators": "^7.16.0",
     "babel-plugin-import": "^1.13.3",
     "craco-less": "^1.20.0",
     "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.2.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.27.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "http-proxy-middleware": "^2.0.1",
     "prettier": "2.4.1",
+    "prettier-eslint": "^13.0.0",
     "redux-devtools-extension": "^2.13.9"
   },
   "config": {
