@@ -1,135 +1,145 @@
-import React, { Component, Fragment } from 'react';
-import { Button, Card, Form, Input, message, Modal, Select, Table } from 'antd';
-import { ExclamationCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
-import { getUserListApi, addUserApi, deleteUserApi } from '@/apis';
+import React, { Component, Fragment } from 'react'
+import { Button, Card, Form, Input, message, Modal, Select, Table } from 'antd'
+import {
+  ExclamationCircleOutlined,
+  PlusCircleOutlined
+} from '@ant-design/icons'
+import dayjs from 'dayjs'
+import { getUserListApi, addUserApi, deleteUserApi } from '@/apis'
 
-const { Option } = Select;
+const { Option } = Select
 
 /**
  * 用户管理路由组件
  */
 export default class User extends Component {
-  addFormRef = React.createRef();
+  addFormRef = React.createRef()
 
   state = {
     userList: [], //用户列表
     isShowAdd: false,
-    roleList: [], //角色列表
-  };
+    roleList: [] //角色列表
+  }
 
   componentDidMount = () => {
-    this.getUserList();
-  };
+    this.getUserList()
+  }
 
   getUserList = async () => {
-    const { status, data, msg } = await getUserListApi();
+    const { status, data, msg } = await getUserListApi()
     if (status === 0) {
-      const { users, roles } = data;
+      const { users, roles } = data
       this.setState({
         userList: users,
-        roleList: roles,
-      });
+        roleList: roles
+      })
     } else {
-      message.error(msg, 2);
+      message.error(msg, 2)
     }
-  };
+  }
 
   //新增用户确认的模态框
   handleAddOkModal = async () => {
     try {
-      const { username, password, email, phone, role_id } = await this.addFormRef.current.validateFields();
-      const { status, msg } = await addUserApi({ username, password, email, phone, role_id });
+      const { username, password, email, phone, role_id } =
+        await this.addFormRef.current.validateFields()
+      const { status, msg } = await addUserApi({
+        username,
+        password,
+        email,
+        phone,
+        role_id
+      })
       if (status === 0) {
-        message.success('新增用户成功', 2);
+        message.success('新增用户成功', 2)
         this.setState({ isShowAdd: false }, () => {
-          this.getUserList();
-          this.addFormRef.current.resetFields();
-        });
+          this.getUserList()
+          this.addFormRef.current.resetFields()
+        })
       } else {
-        message.error(msg, 2);
+        message.error(msg, 2)
       }
     } catch (e) {
-      message.error('表单输入有误，请检查', 2);
+      message.error('表单输入有误，请检查', 2)
     }
-  };
+  }
 
   /**
    * 删除用户
    * @param item
    */
-  deleteUser = item => {
+  deleteUser = (item) => {
     return () => {
-      const { _id: id } = item;
+      const { _id: id } = item
       Modal.confirm({
         title: '确认删除吗',
         icon: <ExclamationCircleOutlined />,
         okText: '确认',
         cancelText: '取消',
         onOk: async () => {
-          const { status, msg } = await deleteUserApi({ userId: id });
+          const { status, msg } = await deleteUserApi({ userId: id })
           if (status === 0) {
-            message.info('删除成功', 2);
-            this.getUserList();
+            message.info('删除成功', 2)
+            this.getUserList()
           } else {
-            message.error(msg, 2);
+            message.error(msg, 2)
           }
-        },
-      });
-    };
-  };
+        }
+      })
+    }
+  }
 
   render() {
     const columns = [
       {
         title: '用户名',
         dataIndex: 'username',
-        key: 'username',
+        key: 'username'
       },
       {
         title: '邮箱',
         dataIndex: 'email',
-        key: 'email',
+        key: 'email'
       },
       {
         title: '电话',
         dataIndex: 'phone',
-        key: 'phone',
+        key: 'phone'
       },
       {
         title: '注册时间',
         dataIndex: 'create_time',
         key: 'create_time',
-        render: item => {
+        render: (item) => {
           if (item) {
-            return dayjs(item).format('YYYY-MM-DD HH:mm:ss');
+            return dayjs(item).format('YYYY-MM-DD HH:mm:ss')
           }
-          return item;
-        },
+          return item
+        }
       },
       {
         title: '所属角色',
         dataIndex: 'role_id',
         key: 'role_id',
-        render: item => {
+        render: (item) => {
           if (item) {
-            const { roleList } = this.state;
+            const { roleList } = this.state
             if (roleList.length) {
-              let role = roleList.find(role => {
-                return role._id === item;
-              });
+              let role = roleList.find((role) => {
+                return role._id === item
+              })
               if (role) {
-                return role.name;
+                return role.name
               }
             }
           }
-          return item;
-        },
+          return item
+        }
       },
       {
         title: '操作',
         key: 'operator',
-        render: item => {
+        render: (item) => {
           return (
             <Fragment>
               <Button type="link" disabled>
@@ -139,14 +149,14 @@ export default class User extends Component {
                 删除
               </Button>
             </Fragment>
-          );
+          )
         },
         width: '25%',
-        align: 'center',
-      },
-    ];
+        align: 'center'
+      }
+    ]
 
-    const { isShowAdd, userList, roleList } = this.state;
+    const { isShowAdd, userList, roleList } = this.state
 
     return (
       <Fragment>
@@ -159,8 +169,8 @@ export default class User extends Component {
                 //显示模态框
                 this.setState({ isShowAdd: true }, () => {
                   //重置表单
-                  this.addFormRef.current.resetFields();
-                });
+                  this.addFormRef.current.resetFields()
+                })
               }}
             >
               添加用户
@@ -185,24 +195,36 @@ export default class User extends Component {
           onCancel={() => {
             this.setState({ isShowAdd: false }, () => {
               //重置表单
-              this.addFormRef.current.resetFields();
-            });
+              this.addFormRef.current.resetFields()
+            })
           }}
         >
-          <Form ref={this.addFormRef} labelCol={{ md: 4 }} wrapperCol={{ md: 16 }}>
+          <Form
+            ref={this.addFormRef}
+            labelCol={{ md: 4 }}
+            wrapperCol={{ md: 16 }}
+          >
             <Form.Item
               label="用户名"
               name="username"
-              rules={[{ required: true, whitespace: true, message: '请输入用户名' }]}
+              rules={[
+                { required: true, whitespace: true, message: '请输入用户名' }
+              ]}
             >
               <Input autoComplete="off" placeholder="请输入商品名称" />
             </Form.Item>
             <Form.Item
               label="密码"
               name="password"
-              rules={[{ required: true, whitespace: true, message: '请输入密码' }]}
+              rules={[
+                { required: true, whitespace: true, message: '请输入密码' }
+              ]}
             >
-              <Input type={'password'} autoComplete="off" placeholder="请输入商品描述" />
+              <Input
+                type={'password'}
+                autoComplete="off"
+                placeholder="请输入商品描述"
+              />
             </Form.Item>
             <Form.Item label="邮箱" name="email">
               <Input autoComplete="off" placeholder="请输入邮箱" />
@@ -210,9 +232,13 @@ export default class User extends Component {
             <Form.Item label="电话" name="phone">
               <Input autoComplete="off" placeholder="请输入电话" />
             </Form.Item>
-            <Form.Item label="角色" name="role_id" rules={[{ required: true, message: '请选择一个角色' }]}>
+            <Form.Item
+              label="角色"
+              name="role_id"
+              rules={[{ required: true, message: '请选择一个角色' }]}
+            >
               <Select allowClear placeholder={'请选择一个角色'}>
-                {roleList.map(role => (
+                {roleList.map((role) => (
                   <Option key={role._id} value={role._id}>
                     {role.name}
                   </Option>
@@ -222,10 +248,15 @@ export default class User extends Component {
           </Form>
         </Modal>
         {/* 修改用户的模态框 */}
-        <Modal title={`修改用户`} visible={false} okText="确认" cancelText="取消">
+        <Modal
+          title={`修改用户`}
+          visible={false}
+          okText="确认"
+          cancelText="取消"
+        >
           <Form>修改用户</Form>
         </Modal>
       </Fragment>
-    );
+    )
   }
 }

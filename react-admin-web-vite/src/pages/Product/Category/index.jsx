@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 export default class Category extends Component {
   render() {
-    return <div>Category</div>;
+    return <div>Category</div>
   }
 }

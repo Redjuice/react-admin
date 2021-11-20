@@ -6,7 +6,7 @@ import { deleteUserAndToken } from '@/redux/actions/login'
 import 'nprogress/nprogress.css'
 import configs from '@/config'
 
-const { baseURL, requestTimeout, withCredentials, contentType }  = configs
+const { baseURL, requestTimeout, withCredentials, contentType } = configs
 // axios配置
 let config = {
   baseURL,

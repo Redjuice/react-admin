@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import { Form, Input, Button, message } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import config from "@/config";
+import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { Form, Input, Button, message } from 'antd'
+import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import config from '@/config'
 import { loginApi } from '@/apis'
-import { saveUserAndToken } from "@/redux/actions/login";
-import "./index.less";
+import { saveUserAndToken } from '@/redux/actions/login'
+import './index.less'
 
 class Login extends Component {
   login = async (values) => {
-    console.log(values);
+    console.log(values)
     // TODO: 因为需要服务器, 这边先使用mock数据
     // const data = {
     //   user: {
@@ -36,28 +36,28 @@ class Login extends Component {
     } else {
       message.warn(msg)
     }
-  };
+  }
 
   validator = (_, value) => {
-    const length = value && value.length;
-    const pwdReg = /^[a-zA-Z0-9_]+$/;
+    const length = value && value.length
+    const pwdReg = /^[a-zA-Z0-9_]+$/
     if (!value) {
-      return Promise.reject(new Error("必须输入密码"));
+      return Promise.reject(new Error('必须输入密码'))
     } else if (length < 4) {
-      return Promise.reject(new Error("密码必须大于 4 位"));
+      return Promise.reject(new Error('密码必须大于 4 位'))
     } else if (length > 12) {
-      return Promise.reject(new Error("密码必须小于 12 位"));
+      return Promise.reject(new Error('密码必须小于 12 位'))
     } else if (!pwdReg.test(value)) {
-      return Promise.reject(new Error("密码必须是英文、数组或下划线组成"));
+      return Promise.reject(new Error('密码必须是英文、数组或下划线组成'))
     } else {
-      return Promise.resolve();
+      return Promise.resolve()
     }
-  };
+  }
 
   render() {
-    const { isLogin } = this.props;
+    const { isLogin } = this.props
     // TODO: 待处理
-    if (isLogin) return <Redirect to="/home" />;
+    if (isLogin) return <Redirect to="/home" />
     return (
       <div className="login" data-component="login">
         <section className="login-content">
@@ -66,13 +66,13 @@ class Login extends Component {
             <Form.Item
               name="username"
               rules={[
-                { required: true, whitespace: true, message: "必须输入用户名" },
-                { min: 4, message: "用户名必须大于 4 位" },
-                { max: 12, message: "用户名必须小于 12 位" },
+                { required: true, whitespace: true, message: '必须输入用户名' },
+                { min: 4, message: '用户名必须大于 4 位' },
+                { max: 12, message: '用户名必须小于 12 位' },
                 {
                   pattern: /^[a-zA-Z0-9_]+$/,
-                  message: "用户名必须是英文、数组或下划线组成",
-                },
+                  message: '用户名必须是英文、数组或下划线组成'
+                }
               ]}
             >
               <Input
@@ -100,10 +100,10 @@ class Login extends Component {
           </Form>
         </section>
       </div>
-    );
+    )
   }
 }
 
 export default connect((state) => ({ isLogin: state.login.isLogin }), {
-  saveUserAndToken,
-})(Login);
+  saveUserAndToken
+})(Login)

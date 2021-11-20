@@ -1,107 +1,107 @@
-import React, { Component } from "react";
-import { NavLink, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { Menu } from "antd";
-import * as Icon from "@ant-design/icons";
-import menuList from "@/routers";
-import config from "@/config";
-import logo from "@/assets/logo.png";
-import "./index.less";
+import React, { Component } from 'react'
+import { NavLink, withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { Menu } from 'antd'
+import * as Icon from '@ant-design/icons'
+import menuList from '@/routers'
+import config from '@/config'
+import logo from '@/assets/logo.png'
+import './index.less'
 
-const { SubMenu } = Menu;
+const { SubMenu } = Menu
 
 class MySider extends Component {
   state = {
     menu: [],
     selectedKeys: [],
-    openKeys: [],
-  };
+    openKeys: []
+  }
 
   componentDidMount() {
-    let menu;
-    const { menus } = this.props.userInfo.role;
+    let menu
+    const { menus } = this.props.userInfo.role
     if (menus && Array.isArray(menus) && menus.length) {
       menu = menuList.filter((menu) => {
         return menus.some((item) => {
-          return item === menu.path;
-        });
-      });
+          return item === menu.path
+        })
+      })
     } else {
-      menu = menuList;
+      menu = menuList
     }
-    this.setState({ menu });
-    let pathname = this.props.location.pathname;
-    if (pathname === "/") pathname = "/home";
-    const menuKey = pathname.split("/");
+    this.setState({ menu })
+    let pathname = this.props.location.pathname
+    if (pathname === '/') pathname = '/home' // TODO: 待处理
+    const menuKey = pathname.split('/')
     switch (menuKey.length) {
       case 2: // 一级目录
         this.setState({
-          selectedKeys: [pathname],
-        });
-        break;
+          selectedKeys: [pathname]
+        })
+        break
       case 4: // 三级目录
         this.setState({
           selectedKeys: [pathname],
           openKeys: [
-            menuKey.slice(0, 2).join("/"),
-            menuKey.slice(0, 3).join("/"),
-          ],
-        });
-        break;
+            menuKey.slice(0, 2).join('/'),
+            menuKey.slice(0, 3).join('/')
+          ]
+        })
+        break
       default:
         this.setState({
           selectedKeys: [pathname],
-          openKeys: [pathname.substr(0, pathname.lastIndexOf("/"))],
-        });
+          openKeys: [pathname.substr(0, pathname.lastIndexOf('/'))]
+        })
     }
   }
 
   openMenu = (openKeys) => {
     if (openKeys.length === 0 || openKeys.length === 1) {
       this.setState({
-        openKeys,
-      });
-      return;
+        openKeys
+      })
+      return
     }
-    const latestOpenKey = openKeys[openKeys.length - 1];
+    const latestOpenKey = openKeys[openKeys.length - 1]
     if (latestOpenKey.includes(openKeys[0])) {
       this.setState({
-        openKeys,
-      });
+        openKeys
+      })
     } else {
       this.setState({
-        openKeys: [latestOpenKey],
-      });
+        openKeys: [latestOpenKey]
+      })
     }
-  };
+  }
 
   renderMenu = ({ title, path, icon }) => {
-    const element = React.createElement(Icon[icon], {}, null);
+    const element = React.createElement(Icon[icon], {}, null)
     return (
       <Menu.Item key={path} icon={element}>
         <NavLink to={path}>
           <span>{title}</span>
         </NavLink>
       </Menu.Item>
-    );
-  };
+    )
+  }
 
   renderSubMenu = ({ title, path, icon, children }) => {
-    const element = React.createElement(Icon[icon], {}, null);
+    const element = React.createElement(Icon[icon], {}, null)
     return (
       <SubMenu key={path} icon={element} title={title}>
         {children &&
           children.map((item) => {
             return item.children && item.children.length
               ? this.renderSubMenu(item)
-              : this.renderMenu(item);
+              : this.renderMenu(item)
           })}
       </SubMenu>
-    );
-  };
+    )
+  }
 
   render() {
-    const { menu, selectedKeys, openKeys } = this.state;
+    const { menu, selectedKeys, openKeys } = this.state
     return (
       <div className="sider" data-component="sider">
         <NavLink to="/home" className="sider-header">
@@ -119,14 +119,14 @@ class MySider extends Component {
           {menu.map((item) => {
             return item.children && item.children.length
               ? this.renderSubMenu(item)
-              : this.renderMenu(item);
+              : this.renderMenu(item)
           })}
         </Menu>
       </div>
-    );
+    )
   }
 }
 
 export default connect((state) => ({ userInfo: state.login.user }))(
   withRouter(MySider)
-);
+)
